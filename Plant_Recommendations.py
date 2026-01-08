@@ -10,17 +10,20 @@ PLANT_DATA = [
 def calculate_severity(co2, tvoc, temp, hum):
     severity = {"co2": "ok", "tvoc": "ok", "heat": "ok", "hum": "ok"}
     
-    # Simple thresholds
     if temp > 30: severity["heat"] = "high"
     elif temp > 25: severity["heat"] = "mod"
+    else: severity["heat"] = "low"
         
     if co2 > 1500: severity["co2"] = "high"
     elif co2 > 800: severity["co2"] = "mod"
+    else: severity["heat"] = "low"
         
     if hum < 30: severity["hum"] = "high"
     elif hum < 50: severity["hum"] = "mod"
+    else: severity["heat"] = "low"
         
     if tvoc > 1000: severity["tvoc"] = "high"
+    else: severity["heat"] = "low"
     
     return severity
 
@@ -28,7 +31,7 @@ def calculate_severity(co2, tvoc, temp, hum):
 def filter_plants(pollutant_type, severity_level, context):
     matches = []
     for plant in PLANT_DATA:
-        # Check 1: Skill
+        # Check 1: Pollutant
         if pollutant_type not in plant["triggers"]: continue
         # Check 2: Strength
         if severity_level not in plant["triggers"][pollutant_type]: continue
@@ -40,19 +43,15 @@ def filter_plants(pollutant_type, severity_level, context):
         matches.append(plant["name"]) 
     return matches
 
-# --- 4. MAIN PART (Direct execution, no fancy "name==main") ---
+# --- 4. EXECUTION
 
 print("--- WELCOME TO THE PLANT RECOMMENDER ---")
 print("Please enter the current sensor readings:")
+user_temp = int(input("Temperature (C): \n"))
+user_co2  = int(input("CO2 Level (ppm): \n"))
+user_hum  = int(input("Humidity (%): \n"))
+user_tvoc = int(input("TVOC Level (ppb): \n"))
 
-# THIS IS HOW YOU GET USER INPUT
-# We use int() to convert the text "35" into the number 35
-user_temp = int(input("Temperature (C): "))
-user_co2  = int(input("CO2 Level (ppm): "))
-user_hum  = int(input("Humidity (%): "))
-user_tvoc = int(input("TVOC Level (ppb): "))
-
-# Create the sensors dictionary dynamically
 sensors = { 
     "co2": user_co2, 
     "tvoc": user_tvoc, 
@@ -63,10 +62,9 @@ sensors = {
 # Hard-coded preferences for now (to keep it simple)
 prefs = { "time_of_day": "night", "light_level": "medium", "pet_safe_required": False }
 
-print(f"\n--- DIAGNOSIS ---")
-# Pass the user's data into the machine
+print(f"--- DIAGNOSIS ---")
 diagnosis = calculate_severity(sensors["co2"], sensors["tvoc"], sensors["temp"], sensors["hum"])
-print(f"Status: {diagnosis}")
+print(f"{diagnosis}")
 
 print(f"\n--- SOLUTIONS ---")
 for pollutant, level in diagnosis.items():
@@ -78,3 +76,5 @@ for pollutant, level in diagnosis.items():
             print(f"  Recommended: {my_plants}")
         else:
             print(f"  No suitable plants found.")
+    else:
+        print("The environment is safe. The pollutants are under controlled levels")
