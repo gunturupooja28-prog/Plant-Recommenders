@@ -77,4 +77,5 @@ for pollutant, level in diagnosis.items():
         else:
             print(f"  No suitable plants found.")
     else:
-        print("The environment is safe. The pollutants are under controlled levels")
+        print(f"The {pollutant} is under safe levels")
+
