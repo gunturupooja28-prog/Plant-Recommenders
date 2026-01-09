@@ -11,7 +11,7 @@ def calculate_severity(co2, tvoc, temp, hum):
     severity = {"co2": "ok", "tvoc": "ok", "heat": "ok", "hum": "ok"}
     
     if temp > 30: severity["heat"] = "high"
-    elif temp > 25: severity["heat"] = "mod"
+    elif temp > 18: severity["heat"] = "mod"
     else: severity["heat"] = "low"
         
     if co2 > 1500: severity["co2"] = "high"
@@ -78,5 +78,6 @@ for pollutant, level in diagnosis.items():
             print(f"  No suitable plants found.")
     else:
         print(f"The {pollutant} is under safe levels")
+
 
 
