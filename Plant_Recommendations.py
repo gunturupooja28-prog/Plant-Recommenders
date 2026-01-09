@@ -11,19 +11,19 @@ def calculate_severity(co2, tvoc, temp, hum):
     severity = {"co2": "ok", "tvoc": "ok", "heat": "ok", "hum": "ok"}
     
     if temp > 30: severity["heat"] = "high"
-    elif temp > 18: severity["heat"] = "mod"
+    elif temp > 25: severity["heat"] = "mod"
     else: severity["heat"] = "low"
         
     if co2 > 1500: severity["co2"] = "high"
     elif co2 > 800: severity["co2"] = "mod"
-    else: severity["heat"] = "low"
+    else: severity["co2"] = "low"
         
     if hum < 30: severity["hum"] = "high"
     elif hum < 50: severity["hum"] = "mod"
-    else: severity["heat"] = "low"
+    else: severity["hum"] = "low"
         
     if tvoc > 1000: severity["tvoc"] = "high"
-    else: severity["heat"] = "low"
+    else: severity["tvoc"] = "low"
     
     return severity
 
@@ -68,16 +68,14 @@ print(f"{diagnosis}")
 
 print(f"\n--- SOLUTIONS ---")
 for pollutant, level in diagnosis.items():
-    if level != "ok" or "low":
-        print(f"\n[Problem: {pollutant} is {level}]")
-        my_plants = filter_plants(pollutant, level, prefs)
+    if level == "high":
+            print(f"\n[Problem: {pollutant} is {level}]")
+            my_plants = filter_plants(pollutant, level, prefs)
         
-        if my_plants:
-            print(f"  Recommended: {my_plants}")
-        else:
-            print(f"  No suitable plants found.")
+            if my_plants:
+                print(f"  Recommended: {my_plants}")
+            else:
+                print(f"  No suitable plants found.")
     else:
-        print(f"The {pollutant} is under safe levels")
-
-
+        print(f"\n {pollutant} is under safe levels")
 
