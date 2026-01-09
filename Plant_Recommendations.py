@@ -68,7 +68,7 @@ print(f"{diagnosis}")
 
 print(f"\n--- SOLUTIONS ---")
 for pollutant, level in diagnosis.items():
-    if level != "ok":
+    if level != "ok" or "low":
         print(f"\n[Problem: {pollutant} is {level}]")
         my_plants = filter_plants(pollutant, level, prefs)
         
@@ -78,4 +78,5 @@ for pollutant, level in diagnosis.items():
             print(f"  No suitable plants found.")
     else:
         print(f"The {pollutant} is under safe levels")
+
 
